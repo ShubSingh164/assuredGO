@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIR Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .fir-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 40px;
+            border: 0.2px solid;
+            border-radius: 10px;
+            background-color: #dddddd;
+            padding-left: 200px;
+        }
+        @media (max-width: 768px) {
+            .fir-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #c3b091;">
+        <a class="navbar-brand" href="/police.html" style="color: black;"><i class="fas fa-shield-alt"></i> AssuredGo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/police.html" style="color: black;"><i class="fas fa-tachometer-alt"></i> Dashboard <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" style="color: black;"><i class="fas fa-file-alt"></i> Reports</a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="/setting_police.html" style="color: black;"><i class="fas fa-cog"></i> Settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" style="color: black;"><i class="fas fa-bell"></i> Notifications <span class="badge badge-light">3</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" style="color: black;  color: #333;
+       padding: 10px 15px;
+       border-radius: 5px; 
+       background-color: #f8f9fa; 
+       text-decoration: none; 
+       display: flex;
+       align-items: center;
+       font-size: 16px; 
+       transition: background-color 0.3s, color 0.3s;"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                </li>
+            </ul> -->
+            <!-- <form class="form-inline my-2 my-lg-0" style="color: black;">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit" style="color: black;">Search</button>
+            </form>-->
+        </div>
+    </nav>
+    <div class="fir-container">
+        <h2>FIR Details</h2>
+        <p id="fir-id"></p>
+        <p id="fir-status"></p>
+        <button id="download-btn" class="btn btn-success">Download</button>
+        <button id="print-btn" class="btn btn-primary">Print</button>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const firId = urlParams.get('firId');
+
+        // For demo, we are hardcoding status, but this can be fetched dynamically.
+        const firStatus = firId === "FIR596232" ? "Open" :
+                          firId === "FIR596245" ? "Under Investigation" : "Closed";
+
+        document.getElementById('fir-id').textContent = `FIR ID: ${firId}`;
+        document.getElementById('fir-status').textContent = `Status: ${firStatus}`;
+
+        document.getElementById('download-btn').addEventListener('click', function() {
+            const element = document.createElement('a');
+            const file = new Blob([`FIR ID: ${firId}\nStatus: ${firStatus}`], {type: 'text/plain'});
+            element.href = URL.createObjectURL(file);
+            element.download = `${firId}.txt`;
+            document.body.appendChild(element);
+            element.click();
+        });
+
+        document.getElementById('print-btn').addEventListener('click', function() {
+            window.print();
+        });
+    </script>
+</body>
+</html>

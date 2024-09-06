@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Emergency Response System</title>
+    <link rel="stylesheet" href="./styles/login.css">
+</head>
+<body>
+    <div class="container login-container">
+    
+            <a href="./assets/logo.png">
+                <img src="./assets/login_logo.png" alt="Logo" style="height: 80px; width: auto; margin-left: 70px;margin-bottom:25px;">
+            </a>
+
+        
+        <form id="loginForm" class="login-form">
+            <h2>Login</h2>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label>Select Department:</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="department" value="police" required>
+                        <span class="radio-custom"></span>
+                        Police
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="department" value="hospital" required>
+                        <span class="radio-custom"></span>
+                        Hospital
+                    </label>
+                    
+                </div>
+            </div>
+            <button type="submit" class="login-button">Login</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const department = document.querySelector('input[name="department"]:checked');
+        
+            if (!department) {
+                alert('Please select a department');
+                return;
+            }
+
+            if (department.value === 'police') {
+                if (username === 'police' && password === '123456') {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('department', department.value);
+                    window.location.href = '/police.html';;
+                } else {
+                    alert('Invalid username or password');
+                }
+            } else if (department.value === 'hospital') {
+                if (username === 'hospital' && password === '123456') {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('department', department.value);
+                    window.location.href = 'hospital.html';
+                } else {
+                    alert('Invalid username or password');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
