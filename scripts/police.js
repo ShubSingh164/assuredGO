@@ -97,10 +97,11 @@ function populateCaseStatusTable() {
     document.querySelectorAll('.view-fir-btn').forEach(button => {
         button.addEventListener('click', function() {
             const firId = this.getAttribute('data-id');
-            window.open(`/fir-details.html?firId=${firId}`, '_blank');
+            // Ensure the path here points to the correct FIR details page
+            window.open(`fir-details.html?firId=${firId}`, '_blank');
         });
     });
-}
+}    
 
 document.addEventListener('DOMContentLoaded', function() {
     populateCaseStatusTable();

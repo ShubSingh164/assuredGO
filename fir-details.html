@@ -5,91 +5,159 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FIR Details</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        .fir-container {
-            max-width: 600px;
-            margin: auto;
-            padding: 40px;
-            border: 0.2px solid;
-            border-radius: 10px;
-            background-color: #dddddd;
-            padding-left: 200px;
-        }
-        @media (max-width: 768px) {
-            .fir-container {
-                padding: 20px;
+        @media print {
+            body * {
+                visibility: hidden;
             }
+            .printable-fir, .printable-fir * {
+                visibility: visible;
+            }
+            .printable-fir {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+        .fir-container {
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .fir-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .fir-field {
+            margin-bottom: 10px;
+        }
+        .fir-field label {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #c3b091;">
+    <nav class="navbar navbar-expand-lg navbar-dark no-print" style="background-color: #1775F1;">
         <a class="navbar-brand" href="/police.html" style="color: black;"><i class="fas fa-shield-alt"></i> AssuredGo</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="/police.html" style="color: black;"><i class="fas fa-tachometer-alt"></i> Dashboard <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" style="color: black;"><i class="fas fa-file-alt"></i> Reports</a>
+                    <a class="nav-link" href="police_report.html" style="color: black;"><i class="fas fa-file-alt"></i> Reports</a>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="/setting_police.html" style="color: black;"><i class="fas fa-cog"></i> Settings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" style="color: black;"><i class="fas fa-bell"></i> Notifications <span class="badge badge-light">3</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" style="color: black;  color: #333;
-       padding: 10px 15px;
-       border-radius: 5px; 
-       background-color: #f8f9fa; 
-       text-decoration: none; 
-       display: flex;
-       align-items: center;
-       font-size: 16px; 
-       transition: background-color 0.3s, color 0.3s;"><i class="fas fa-sign-out-alt"></i>Logout</a>
-                </li>
-            </ul> -->
-            <!-- <form class="form-inline my-2 my-lg-0" style="color: black;">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-light my-2 my-sm-0" type="submit" style="color: black;">Search</button>
-            </form>-->
+            </ul>
         </div>
     </nav>
-    <div class="fir-container">
-        <h2>FIR Details</h2>
-        <p id="fir-id"></p>
-        <p id="fir-status"></p>
-        <button id="download-btn" class="btn btn-success">Download</button>
-        <button id="print-btn" class="btn btn-primary">Print</button>
+
+    <div class="fir-container printable-fir">
+        <div class="fir-header">
+            <h2>First Information Report (FIR)</h2>
+        </div>
+        <div class="fir-field">
+            <label>FIR Number:</label>
+            <span id="fir-id"></span>
+        </div>
+        <div class="fir-field">
+            <label>Date of Filing:</label>
+            <span id="filing-date"></span>
+        </div>
+        <div class="fir-field">
+            <label>Police Station:</label>
+            <span id="police-station"></span>
+        </div>
+        <div class="fir-field">
+            <label>Complainant Name:</label>
+            <span id="complainant-name"></span>
+        </div>
+        <div class="fir-field">
+            <label>Incident Date:</label>
+            <span id="incident-date"></span>
+        </div>
+        <div class="fir-field">
+            <label>Incident Location:</label>
+            <span id="incident-location"></span>
+        </div>
+        <div class="fir-field">
+            <label>Nature of Complaint:</label>
+            <span id="complaint-nature"></span>
+        </div>
+        <div class="fir-field">
+            <label>Details of Incident:</label>
+            <p id="incident-details"></p>
+        </div>
+        <div class="fir-field">
+            <label>Status:</label>
+            <span id="fir-status"></span>
+        </div>
+        <div class="fir-field">
+            <label>Investigating Officer:</label>
+            <span id="investigating-officer"></span>
+        </div>
+    </div>
+
+    <div class="text-center mt-3 no-print">
+        <button id="print-btn" class="btn btn-primary mr-2">Print FIR</button>
+        <button id="download-pdf-btn" class="btn btn-success">Download as PDF</button>
     </div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const firId = urlParams.get('firId');
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const firId = urlParams.get('firId');
 
-        // For demo, we are hardcoding status, but this can be fetched dynamically.
-        const firStatus = firId === "FIR596232" ? "Open" :
-                          firId === "FIR596245" ? "Under Investigation" : "Closed";
+            // Simulated data - replace with actual data fetching logic
+            const firData = {
+                id: firId || 'FIR596232',
+                status: 'Open',
+                filingDate: '2024-09-07',
+                policeStation: 'Central Police Station',
+                complainantName: 'John Doe',
+                incidentDate: '2024-09-05',
+                incidentLocation: '123 Main St, City',
+                complaintNature: 'Theft',
+                incidentDetails: 'On the evening of September 5th, 2024, the complainant vehicle was stolen from the parking lot of Central Mall...',
+                investigatingOfficer: 'Inspector Sarah Johnson'
+            };
 
-        document.getElementById('fir-id').textContent = `FIR ID: ${firId}`;
-        document.getElementById('fir-status').textContent = `Status: ${firStatus}`;
-
-        document.getElementById('download-btn').addEventListener('click', function() {
-            const element = document.createElement('a');
-            const file = new Blob([`FIR ID: ${firId}\nStatus: ${firStatus}`], {type: 'text/plain'});
-            element.href = URL.createObjectURL(file);
-            element.download = `${firId}.txt`;
-            document.body.appendChild(element);
-            element.click();
+            // Populate the FIR details
+            document.getElementById('fir-id').textContent = firData.id;
+            document.getElementById('fir-status').textContent = firData.status;
+            document.getElementById('filing-date').textContent = firData.filingDate;
+            document.getElementById('police-station').textContent = firData.policeStation;
+            document.getElementById('complainant-name').textContent = firData.complainantName;
+            document.getElementById('incident-date').textContent = firData.incidentDate;
+            document.getElementById('incident-location').textContent = firData.incidentLocation;
+            document.getElementById('complaint-nature').textContent = firData.complaintNature;
+            document.getElementById('incident-details').textContent = firData.incidentDetails;
+            document.getElementById('investigating-officer').textContent = firData.investigatingOfficer;
         });
 
         document.getElementById('print-btn').addEventListener('click', function() {
             window.print();
+        });
+
+        document.getElementById('download-pdf-btn').addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            
+            html2canvas(document.querySelector('.printable-fir')).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgProps = pdf.getImageProperties(imgData);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save('FIR_Details.pdf');
+            });
         });
     </script>
 </body>
